@@ -1,0 +1,184 @@
+package com.ihm.model;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
+
+import javax.validation.constraints.Size;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
+import javax.persistence.TableGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Version;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+@Entity
+@TableGenerator(name="id_sequence", table="id_sequence", pkColumnName="sequence_name",
+valueColumnName="next_id", initialValue=1000,allocationSize=1, pkColumnValue="ihm_user_role")
+@Table(name="IHM_USER_ROLE")
+public class UserRole {
+	@Id
+	@GeneratedValue(strategy = GenerationType.TABLE , generator="id_sequence")
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+    /**
+     */
+    private String code;
+
+    /**
+     */
+    private String description;
+
+    /**
+     */
+    @Size(max = 1)
+    private String disableFlg;
+
+    /**
+     */
+    @Size(max = 16)
+    private String createdBy;
+
+    /**
+     */
+    @Size(max = 16)
+    private String updatedBy;
+
+    /**
+     */
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date createdOn;
+
+    /**
+     */
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date updatedOn;
+
+	public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
+	public String getCode() {
+        return this.code;
+    }
+
+	public void setCode(String code) {
+        this.code = code;
+    }
+
+	public String getDescription() {
+        return this.description;
+    }
+
+	public void setDescription(String description) {
+        this.description = description;
+    }
+
+	public String getDisableFlg() {
+        return this.disableFlg;
+    }
+
+	public void setDisableFlg(String disableFlg) {
+        this.disableFlg = disableFlg;
+    }
+
+	public String getCreatedBy() {
+        return this.createdBy;
+    }
+
+	public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+	public String getUpdatedBy() {
+        return this.updatedBy;
+    }
+
+	public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+	public Date getCreatedOn() {
+        return this.createdOn;
+    }
+
+	public void setCreatedOn(Date createdOn) {
+        this.createdOn = createdOn;
+    }
+
+	public Date getUpdatedOn() {
+        return this.updatedOn;
+    }
+
+	public void setUpdatedOn(Date updatedOn) {
+        this.updatedOn = updatedOn;
+    }
+
+	public String toJson() {
+        return new JSONSerializer()
+        .exclude("*.class").deepSerialize(this);
+    }
+
+	public String toJson(String[] fields) {
+        return new JSONSerializer()
+        .include(fields).exclude("*.class").deepSerialize(this);
+    }
+
+	public static UserRole fromJsonToCountry(String json) {
+        return new JSONDeserializer<UserRole>()
+        .use(null, UserRole.class).deserialize(json);
+    }
+
+	public static String toJsonArray(Collection<UserRole> collection) {
+        return new JSONSerializer()
+        .exclude("*.class").deepSerialize(collection);
+    }
+
+	public static String toJsonArray(Collection<UserRole> collection, String[] fields) {
+        return new JSONSerializer()
+        .include(fields).exclude("*.class").deepSerialize(collection);
+    }
+
+	public static Collection<UserRole> fromJsonArrayToCountrys(String json) {
+        return new JSONDeserializer<List<UserRole>>()
+        .use("values", UserRole.class).deserialize(json);
+    }
+
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+}
